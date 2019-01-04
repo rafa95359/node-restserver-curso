@@ -2,7 +2,7 @@
 //Puerto
 //>>>>>>>>>>>>>>>
 
-process.env.PORT=process.env.PORT||8081;
+process.env.PORT=process.env.PORT||8080;
 
 
 
@@ -44,4 +44,8 @@ process.env.CADUCIDAD_TOKEN=60*600*24*300;
 process.env.SEED=process.env.SEED||'este-es-el-seed-desarrollo'
 
 
+//>>>>>>>>>>>>>>>
+//GoogleCLient ID
+//>>>>>>>>>>>>>>>
+process.env.CLIENT_ID = process.env.CLIENT_ID || '407974213524-f2a0amv30u9m2a80r3gsnnh2uh7h7jqq.apps.googleusercontent.com'
 

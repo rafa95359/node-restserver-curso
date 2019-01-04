@@ -1,7 +1,14 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
 const Usuario = require('../models/usuario');
+
+
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
+
+
 const app = express();
 
 
@@ -52,14 +59,147 @@ app.post('/login',(req,res)=>{
             ok:true,        
             usuario:usuarioDB,
             token
-        });
-    
+        });   
+
 
 
     })
 
     
 
+
+
+});
+
+
+//COnfiguraciones de GOOGLE
+async function verify(token) {
+    const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+        // Or, if multiple clients access the backend:
+        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
+
+    //en el payload esta toda la informacion de la persona
+    const payload = ticket.getPayload();
+    console.log(payload.name);
+    console.log(payload.email);
+    console.log(payload.picture);
+
+    return {
+        nombre:payload.name,
+        email: payload.name,
+        img: payload.picture,
+        google: true,
+        
+    }
+//
+    
+  }
+
+
+
+////////////////////////////////////
+//El back end recibe el token
+////////////////////////////////////
+app.post('/google',async(req,res)=>{
+    //obtenemos el token para luego procesarlo
+    let token = req.body.idtoken;
+
+    let googleUser = await verify(token)
+        .catch(e=>{
+            return res.status(403).json({
+                ok:false,
+                err: e
+            });
+        });
+
+     
+
+    //para verificar si es que ya esta registrado   
+    Usuario.findOne({email : googleUser.email},(err,usuarioDB)=>{
+        if(err){
+            return res.status(500).json({
+                ok:false,
+                err
+            });
+        };  
+    
+        //Si existe ya en nuestra DB
+        if(usuarioDB){
+
+            //si es que es de registro normal 
+            if(usuarioDB.google === false){
+                
+                return res.status(400).json({
+                    ok:false,
+                    err:{
+                    message: 'Debe de usar su autenticacion normal'
+                    }
+                });     
+                
+                
+
+            }
+            
+            else{
+                //creamos nuestro propio token
+                let token =jwt.sign({
+                    usuario : usuarioDB
+                },process.env.SEED,{expiresIn:process.env.CADUCIDAD_TOKEN});
+
+                return res.json({
+                    ok:true,
+                    usuario: usuarioDB,
+                    token
+                });          
+            }                  
+        
+        
+        }else{
+
+            //Primera vez
+            //Si el usuario no existe en nuestra base de datos
+            // este se va a crear con su cuenta de google
+            let usuario = new Usuario();
+
+            usuario.nombre = googleUser.nombre;
+            usuario.email = googleUser.email;
+            usuario.img = googleUser.img;
+            usuario.google = true;
+            usuario.password = ':)';
+
+            usuario.save((err,usuarioDB)=>{
+                if(err){
+                    return res.status(500).json({
+                        ok:false,
+                        err
+                    });
+                };
+
+
+
+                let token =jwt.sign({
+                    usuario : usuarioDB
+                },process.env.SEED,{expiresIn:process.env.CADUCIDAD_TOKEN});
+
+                return res.json({
+                    ok:true,
+                    usuario: usuarioDB,
+                    token
+                });
+            
+            });
+
+
+        }
+
+    })
+                       
+    //res.json({
+    //    usuario: googleUser
+    //})
 
 });
 

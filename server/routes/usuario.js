@@ -14,6 +14,7 @@ app.get('/usuario', verificaToken,(req, res)=> {
   
 
   return res.json({
+    //regresa la informacion del token
     usuario:req.usuario, 
     nombre:req.usuario.nombre,
     email:req.usuario.email
@@ -56,8 +57,7 @@ app.get('/usuario', verificaToken,(req, res)=> {
   
   });
   
-app.post('/usuario',[verificaToken,verificaAdmin_Role],function (req, res) {
-  
+app.post('/usuario',[verificaToken,verificaAdmin_Role],function (req, res) {  
 
     //EN REQ.BODY ESTA LO QUE ME MANDAN 
     let body = req.body;
@@ -72,7 +72,6 @@ app.post('/usuario',[verificaToken,verificaAdmin_Role],function (req, res) {
 
     });
 
-
     //GUARDAMOS EN LA BASE DE DATOS  
     usuario.save((err,usuarioDB)=>{
       if(err){
@@ -82,24 +81,19 @@ app.post('/usuario',[verificaToken,verificaAdmin_Role],function (req, res) {
           });
       }
 
+
+
       //pero no es necesario mandar de vuelta la contraseña encriptada
       //usuarioDB.password=null;
       res.json({
           ok:true,
           usuarioes:usuarioDB
+
       })
     }) 
-  });
+ });
 
   
-
-
-
-
-
-
-
-
 
 
 app.put('/usuario/:id',[verificaToken,verificaAdmin_Role], function (req, res) {
@@ -117,10 +111,7 @@ app.put('/usuario/:id',[verificaToken,verificaAdmin_Role], function (req, res) {
       usuarioDB.save();
     })
 
-    */
-    
-    
-
+    */    
     //nota : es necesario validar todos los parametros;en este caso se actualizan google y password
     //se soluciona con underscore
 
@@ -146,15 +137,6 @@ app.put('/usuario/:id',[verificaToken,verificaAdmin_Role], function (req, res) {
     
   });
   
-
-
-
-
-
-
-
-
-
 
 app.delete('/usuario/:id',[verificaToken,verificaAdmin_Role], function (req, res) {
   let id = req.params.id;

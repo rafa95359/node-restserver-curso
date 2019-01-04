@@ -7,13 +7,19 @@ const mongoose = require('mongoose')
 
 const app = express()
 
+//paquete por defecto para mandar segmentos de path y los arma 
 
+const path = require('path');
 
 const bodyParser = require('body-parser') 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false })) 
 // parse application/json
 app.use(bodyParser.json())
+
+//habilitar la carpeta public
+app.use(express.static(path.resolve(__dirname,'../public')));
+
 
 
 //para llamar a usuario.js 
