@@ -3,6 +3,12 @@ const jwt = require('jsonwebtoken');
 //>>>>>>>>>>>>>
 //Verificar Token
 //>>>>>>>>>>>>>
+
+
+//////////////////////////
+//Nota el token es el creado al iniciar sesion y 
+//a partir de este se dan permisos de crear ususario y actualizarlos
+/////////////////////////
 let verificaToken=(req,res,next)=>{
 
         
@@ -23,7 +29,7 @@ let verificaToken=(req,res,next)=>{
 
         }
         //decoded es el payload.Informacion decodificada
-        req.usuariosss = decoded.usuario;
+        req.usuario = decoded.usuario;
         //continua la ejecucion del programa
         next();
 

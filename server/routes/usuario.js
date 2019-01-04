@@ -14,10 +14,11 @@ app.get('/usuario', verificaToken,(req, res)=> {
   
 
   return res.json({
-    usuario:req.usuariosss, 
-    nombre:req.usuariosss.nombre,
-    email:req.usuariosss.email
+    usuario:req.usuario, 
+    nombre:req.usuario.nombre,
+    email:req.usuario.email
   })
+
 
 //funcion de mongoose  para ver los registros 
   //como paginas skip salta a que,limit la cantidad
