@@ -4,13 +4,22 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
 const Usuario = require('../models/usuario')
-
+const {verificaToken,verificaAdmin_Role} = require('../middlewares/autenticacion')
 const app = express()
 
-
-app.get('/usuario', function (req, res) {
+//el parametro verificaToken esta para que se ejecute y necesita el next para seguir con el resto
+//en verificaToken se modifica a req
+app.get('/usuario', verificaToken,(req, res)=> {
   
-  //funcion de mongoose  para ver los registros 
+  
+
+  return res.json({
+    usuario:req.usuariosss, 
+    nombre:req.usuariosss.nombre,
+    email:req.usuariosss.email
+  })
+
+//funcion de mongoose  para ver los registros 
   //como paginas skip salta a que,limit la cantidad
   //mandar parametros opcionales {{url}}/usuario?limite=10&desde=10
 
@@ -46,7 +55,7 @@ app.get('/usuario', function (req, res) {
   
   });
   
-app.post('/usuario', function (req, res) {
+app.post('/usuario',[verificaToken,verificaAdmin_Role],function (req, res) {
   
 
     //EN REQ.BODY ESTA LO QUE ME MANDAN 
@@ -92,13 +101,11 @@ app.post('/usuario', function (req, res) {
 
 
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id',[verificaToken,verificaAdmin_Role], function (req, res) {
   
     let id = req.params.id;
     let body= _.pick(req.body,['nombre',
-    'email','img','role','estado']);
-
-    
+    'email','img','role','estado']);   
 
 
     /* una manera de hacerlo.Pedimos ID nos 
@@ -113,7 +120,7 @@ app.put('/usuario/:id', function (req, res) {
     
     
 
-    //nota : es necesario validar todos los parametros;en este caso se actualizan google y passwrord
+    //nota : es necesario validar todos los parametros;en este caso se actualizan google y password
     //se soluciona con underscore
 
     Usuario.findByIdAndUpdate(id,body,{new:true,runValidators:true},(err,usuarioDB)=>{
@@ -148,7 +155,7 @@ app.put('/usuario/:id', function (req, res) {
 
 
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id',[verificaToken,verificaAdmin_Role], function (req, res) {
   let id = req.params.id;
 
   //eliminar fisicamente

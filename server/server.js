@@ -17,7 +17,11 @@ app.use(bodyParser.json())
 
 
 //para llamar a usuario.js 
-app.use(require('./routes/usuario'));
+//app.use(require('./routes/usuario'));
+//configuracion global de rutas
+
+app.use(require('./routes/index'));
+
 
 
 /*coneccion a la base de datos cafe en puerto 27017*/
