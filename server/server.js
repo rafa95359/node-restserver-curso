@@ -3,9 +3,9 @@ require('./config/config');
 
 const express = require('express');
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const app = express()
+const app = express();
 
 //paquete por defecto para mandar segmentos de path y los arma 
 

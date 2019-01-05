@@ -35,7 +35,7 @@ process.env.URLDB = urlDB;
 //60 m
 //24 horas
 //30 dias
-process.env.CADUCIDAD_TOKEN=60*600*24*300;
+process.env.CADUCIDAD_TOKEN='48h';
 
 //>>>>>>>>>>>>>>>
 //SEED de autenticacion

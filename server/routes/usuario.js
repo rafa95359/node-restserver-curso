@@ -11,7 +11,6 @@ const app = express()
 //en verificaToken se modifica a req
 app.get('/usuario', verificaToken,(req, res)=> {
   
-  
 
   return res.json({
     //regresa la informacion del token

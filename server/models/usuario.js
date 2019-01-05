@@ -60,7 +60,7 @@ usuarioSchema.methods.toJSON =function(){
     return userObject;
 }
 
-
+//el uniqueValidator evita que se duploquen asi como que se cambie ese campo
 usuarioSchema.plugin(uniqueValidator,{message: '{PATH} email debe ser unico'});
 
 module.exports=mongoose.model('Usuario',usuarioSchema);
