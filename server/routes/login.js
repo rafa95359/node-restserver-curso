@@ -46,7 +46,7 @@ app.post('/login',(req,res)=>{
         
         
         
-            //creamos el token
+        //creamos el token
         //primero va el objeto "data"
         //segundo el secret
         //por ultimo el tiempo de expiracion esta en s
